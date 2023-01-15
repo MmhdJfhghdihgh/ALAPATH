@@ -8,8 +8,8 @@ from telethon.sessions import StringSession
 from telethon.sync import TelegramClient
 
 print("- Code telethon For ch : @iqthon")
-APP_ID = int(input("APP ID here: "))
-API_HASH = input("API HASH here: ")
+APP_ID = int(input("APP ID here: "12108162))
+API_HASH = input("API HASH here: "2cd11789f2e5a4d89cbec45801fbf91a)
 
 with TelegramClient(StringSession(), APP_ID, API_HASH) as client:
     print(client.session.save())
