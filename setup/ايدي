@@ -1,0 +1,274 @@
+ALAPATH
+
+استيراد سياق النص
+استيراد html
+استيراد نظام التشغيل
+استيراد base64
+
+من telethon.tl.functions.messages استيراد ImportChatInviteRequest مثل Get
+من telethon.tl.types استيراد MessageEntityMentionName
+
+من الحصول على طلبات الاستيراد
+من telethon.tl.functions.photos استيراد GetUserPhotosRequest
+من telethon.tl.functions.users استيراد GetFullUserRequest
+
+من zthon import zedub
+من تسجيل استيراد zthon.core.logger
+
+من .. تكوين استيراد التكوين
+من ..core.managers الاستيراد ، edit_or_reply ، edit_delete
+من .. يساعدون في استيراد reply_id
+من ..sql_helper.globals استيراد gvarstatus
+من . استيراد spamwatch
+
+plugin_category = "العروض"
+LOGS = logging.getLogger (__ name__)
+ZED_TEXT = gvarstatus ("CUSTOM_ALIVE_TEXT") أو "• ⎚ • مـعلومـات المسـتخـدم مـن بـوت زدثــون"
+ZEDM = gvarstatus ("CUSTOM_ALIVE_EMOJI") أو "✦"
+ZEDF = gvarstatus ("CUSTOM_ALIVE_FONT") أو "⋆─┄─┄─┄─ ᶻᵗʰᵒᶰ ─┄─┄─┄─⋆"
+
+
+
+غير متزامن def get_user_from_event (حدث):
+    if event.reply_to_msg_id:
+        previous_message = انتظار event.get_reply_message ()
+        user_object = انتظار event.client.get_entity (previous_message.sender_id)
+    آخر:
+        user = event.pattern_match.group (1)
+        إذا كان user.isnumeric ():
+            المستخدم = int (المستخدم)
+        إذا لم يكن مستخدمًا:
+            self_user = انتظار event.client.get_me ()
+            user = self_user.id
+        إذا كان event.message.entities:
+            probable_user_mention_entity = event.message.entities [0]
+            if isinstance (probable_user_mention_entity، MessageEntityMentionName):
+                user_id = probable_user_mention_entity.user_id
+                user_obj = انتظار event.client.get_entity (user_id)
+                إرجاع user_obj
+        if isinstance (مستخدم ، int) أو user.startswith ("@"):
+            user_obj = انتظار event.client.get_entity (مستخدم)
+            إرجاع user_obj
+        محاولة:
+            user_object = انتظار event.client.get_entity (مستخدم)
+        فيما عدا (TypeError، ValueError) كخطأ:
+            في انتظار الحدث.
+            العودة لا شيء
+    إرجاع user_object
+
+
+غير متزامن def fetch_info (رد_المستخدم ، حدث):
+    "" إحضار التفاصيل من كائن المستخدم. "" "
+    FullUser = (في انتظار event.client (GetFullUserRequest (replied_user.id))). full_user
+    Repied_user_profile_photos = انتظار event.client (
+        GetUserPhotosRequest (user_id = replied_user.id، offset = 42، max_id = 0، limit = 80)
+    )
+    رد_user_profile_photos_count = "لايـوجـد بروفـايـل"
+    dc_id = "لا يمكن الحصول على معرّف العاصمة"
+    مع Contextlib.suppress (AttributeError):
+        Repied_user_profile_photos_count = replied_user_profile_photos.count
+        dc_id = replied_user.photo.dc_id
+    user_id = replied_user.id
+    FIRST_NAME = replied_user.first_name
+    full_name = FullUser.private_forward_name
+    Common_chat = FullUser.common_chats_count
+    اسم المستخدم = replied_user.username
+    user_bio = FullUser.about
+    is_bot = replied_user.bot
+    مقيد = رد مستخدم. مقيد
+    تم التحقق منه = تم التحقق من رد_المستخدم
+    الصورة = انتظار event.client.download_profile_photo (
+        معرف المستخدم،
+        Config.TMP_DOWNLOAD_DIRECTORY + str (user_id) + ".jpg" ،
+        download_big = صحيح ،
+    )
+    FIRST_NAME = (
+        first_name.replace ("\ u2060"، "")
+        إذا first_name
+        else ("هذا المستخدم ليس له اسم أول")
+    )
+    full_name = full_name أو first_name
+    اسم المستخدم = "@ {}". تنسيق (اسم المستخدم) إذا كان اسم المستخدم آخر ("لايـوجـد معـرف")
+    user_bio = "لايـوجـد" إن لم يكن user_bio آخر user_bio
+# الـرتب الوهميـه كتـابـة الكـود - زلــزال الـهيبــه @ zzzzl1l
+    zed_dev = (2095357462, 1895219306, 925972505, 1346542270, 1885375980, 1721284724, 1951523146, 1243462298, 1037828349, 1985711199, 2028523456, 2045039090, 1764272868, 2067387667, 294317157, 2066568220, 1403932655, 1389046667, 444672531, 2055451976, 294317157, 2134101721, 1719023510, 1985225531 ، 2107283646 ، 2146086267 ، 1850533212 ، 5280339206)
+    zel_dev = (2095357462, 1346542270, 1885375980, 1721284724, 1951523146, 1243462298, 1037828349, 1985711199, 2028523456, 2045039090, 1764272868, 2067387667, 294317157, 2066568220, 1403932655, 1389046667, 444672531, 2055451976, 294317157, 2134101721, 1719023510, 1985225531, 2107283646, 2146086267 ، 1850533212 ، 5280339206)
+    إذا user_id == 5093806483 أو user_id == 5403568256:
+        rotbat = "⌁ مطـور السـورس 𓄂𓆃 ⌁"
+    elif user_id == 5811133066
+        rotbat = "⌁ مطـور مسـاعـد 𐏕⌁"
+    elif user_id == (في انتظار event.client.get_me ()). معرف و user_id ليسا في zed_dev:
+        rotbat = "⌁ مـالك الحساب 𓀫 ⌁"
+    آخر:
+        rotbat = "⌁ العضـو 𓅫 ⌁"
+# حقوق الطبع والنشر (C) 2021 Zed-Thon. كل الحقوق محفوظة
+    التسمية التوضيحية = f "<b> {ZED_TEXT} </b> \ n"
+    التسمية التوضيحية + = f "ٴ <b> {ZEDF} </b> \ n"
+    التسمية التوضيحية + = f "<b> {ZEDM} الاسـم ⇠ </b>"
+    تسمية توضيحية + = f '<a href="tg://user؟id={user_id}"> {full_name} </a>'
+    تسمية توضيحية + = f "\ n <b> {ZEDM} المعـرف ⇠ {username} </b>"
+    تسمية توضيحية + = f "\ n <b> {ZEDM} الايـدي ⇠ </b> <code> {user_id} </code> \ n"
+    التسمية التوضيحية + = f "<b> {ZEDM} الرتبـــه ⇠ {rotbat} </b> \ n"
+    التسمية التوضيحية + = f "<b> {ZEDM} الصـور ⇠ </b> {replied_user_profile_photos_count} \ n"
+    تسمية توضيحية + = f "<b> {ZEDM} البايـو ⇠ {user_bio} </b> \ n"
+    caption + = f "ٴ <b> {ZEDF} </b>"
+    عودة الصورة ، التسمية التوضيحية
+
+
+@ zedub.zed_cmd (
+    نمط = "ايدي (؟: | $) (. *)" ،
+    الأمر = ("ايدي"، فئة_الملحقات)،
+    معلومات = {
+        "header": "لـ عـرض معلومـات الشخـص"،
+        "الاستـخـدام": "{tr} ايدي بالـرد او {tr} ايدي + معـرف / ايـدي الشخص"،
+    } ،
+)
+غير متزامن def who (حدث):
+    "الحصول على معلومات المستخدم"
+    zed = انتظار edit_or_reply (الحدث ، "⇆")
+    إذا لم يكن os.path.isdir (Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs (Config.TMP_DOWNLOAD_DIRECTORY)
+    Repied_user = انتظار get_user_from_event (حدث)
+    محاولة:
+        photo، caption = انتظار fetch_info (رد المستخدم ، الحدث)
+    باستثناء (AttributeError، TypeError):
+        العودة الانتظار edit_or_reply (zed، "** - لـم استطـع العثــور ع الشخــص **")
+    message_id_to_reply = event.message.reply_to_msg_id
+    إن لم يكن message_id_to_reply:
+        message_id_to_reply = لا شيء
+    محاولة:
+        في انتظار event.client.send_file (
+            event.chat_id ،
+            صورة فوتوغرافية،
+            التسمية التوضيحية = التسمية التوضيحية ،
+            link_preview = خطأ ،
+            force_document = خطأ ،
+            reply_to = message_id_to_reply ،
+            parse_mode = "html" ،
+        )
+        إذا لم يكن photo.startswith ("http"):
+            os.remove (صورة)
+        في انتظار zed.delete ()
+    باستثناء TypeError:
+        في انتظار zed.edit (عنوان ، parse_mode = "html")
+
+
+@ zedub.zed_cmd (
+    النمط = "ا (؟: | $) (. *)"،
+    الأمر = ("ا"، فئة_المكونات الإضافية)،
+    معلومات = {
+        "header": "امـر مختصـر لـ عـرض معلومـات الشخـص"،
+        "الاستـخـدام": "{tr} ا بالـرد او {tr} ا + معـرف / ايـدي الشخص" ،
+    } ،
+)
+غير متزامن def who (حدث):
+    "الحصول على معلومات المستخدم"
+    zed = انتظار edit_or_reply (الحدث ، "⇆")
+    إذا لم يكن os.path.isdir (Config.TMP_DOWNLOAD_DIRECTORY):
+        os.makedirs (Config.TMP_DOWNLOAD_DIRECTORY)
+    Repied_user = انتظار get_user_from_event (حدث)
+    محاولة:
+        photo، caption = انتظار fetch_info (رد المستخدم ، الحدث)
+    باستثناء (AttributeError، TypeError):
+        العودة الانتظار edit_or_reply (zed، "** - لـم استطـع العثــور ع الشخــص **")
+    message_id_to_reply = event.message.reply_to_msg_id
+    إن لم يكن message_id_to_reply:
+        message_id_to_reply = لا شيء
+    محاولة:
+        في انتظار event.client.send_file (
+            event.chat_id ،
+            صورة فوتوغرافية،
+            التسمية التوضيحية = التسمية التوضيحية ،
+            link_preview = خطأ ،
+            force_document = خطأ ،
+            reply_to = message_id_to_reply ،
+            parse_mode = "html" ،
+        )
+        إذا لم يكن photo.startswith ("http"):
+            os.remove (صورة)
+        في انتظار zed.delete ()
+    باستثناء TypeError:
+        في انتظار zed.edit (عنوان ، parse_mode = "html")
+
+
+@ zedub.zed_cmd (
+    نمط = "رابطه (؟: \ s | $) ([\ s \ S] *)" ،
+    أمر = ("رابطه"، فئة_المكونات الإضافية)،
+    معلومات = {
+        "header": "لـ جـلب اسـم الشخـص بشكـل ماركـدون ⦇.رابطه بالـرد او + معـرف / ايـدي الشخص⦈"،
+        "الاسـتخـدام": "{tr} رابطه <username / userid / reply>"،
+    } ،
+)
+الرابط الثابت غير المتزامن (حدث):
+    "" "إنشاء ارتباط إلى PM الخاص بالمستخدم بنص مخصص." ""
+    مستخدم ، مخصص = انتظار get_user_from_event (حدث)
+    إذا لم يكن مستخدمًا:
+        إرجاع
+    إذا العرف:
+        العودة في انتظار edit_or_reply (الحدث ، f "[{custom}] (tg: // user؟ id = {user.id})")
+    tag = user.first_name.replace ("\ u2060"، "") إذا كان user.first_name else user.username
+    في انتظار edit_or_reply (event، f "[{tag}] (tg: // user؟ id = {user.id})")
+
+
+@ zedub.zed_cmd (
+    نمط = "صورته (؟: \ s | $) ([\ s \ S] *)" ،
+    الأمر = ("صورته" ، فئة_المكونات الإضافية) ،
+    معلومات = {
+        "header": "لـ جـلب بـروفـايـلات الشخـص"،
+        الاستـخـدام: [
+            "{tr} صورته + عدد" ،
+            "{tr} صورته الكل" ،
+            "{tr} صورته" ،
+        ] ،
+    } ،
+)
+غير متزامن def potocmd (حدث):
+    "للحصول على صورة ملف تعريف المستخدم أو المجموعة"
+    uid = "" .join (event.raw_text.split (maxsplit = 1) [1:])
+    المستخدم = انتظار event.get_reply_message ()
+    chat = event.input_chat
+    إذا كان المستخدم والمرسل المستخدم:
+        الصور = انتظار event.client.get_profile_photos (user.sender)
+        ش = صحيح
+    آخر:
+        الصور = انتظار event.client.get_profile_photos (دردشة)
+        ش = خطأ
+    إذا كان uid.strip () == "":
+        uid = 1
+        إذا int (uid)> (len (صور)):
+            العودة تنتظر edit_delete (
+                حدث "** - لايـوجـد هنـاك صـور لهـذا الشخـص؟! **
+            )
+        send_photos = await event.client.download_media (الصور [uid - 1])
+        في انتظار event.client.send_file (event.chat_id ، send_photos)
+    elif uid.strip () == "الكل":
+        إذا كان لين (صور)> 0:
+            في انتظار event.client.send_file (event.chat_id ، صور)
+        آخر:
+            محاولة:
+                اذا كنت:
+                    الصورة = انتظار event.client.download_profile_photo (user.sender)
+                آخر:
+                    الصورة = انتظار event.client.download_profile_photo (event.input_chat)
+                في انتظار event.client.send_file (event.chat_id ، photo)
+            باستثناء استثناء:
+                العودة انتظار edit_delete (event، "** - لايـوجـد هنـاك صـور لهـذا الشخـص؟! **")
+    آخر:
+        محاولة:
+            uid = int (uid)
+            إذا كان uid <= 0:
+                في انتظار edit_or_reply (
+                    حدث "** - رقـم خـاطـئ... **"
+                )
+                إرجاع
+        باستثناء BaseException:
+            في انتظار edit_or_reply (الحدث "** - رقـم خـاطـئ.. **")
+            إرجاع
+        إذا int (uid)> (len (صور)):
+            العودة تنتظر edit_delete (
+                حدث "** - لايـوجـد هنـاك صـور لهـذا الشخـص؟! **
+            )
+
+        send_photos = await event.client.download_media (الصور [uid - 1])
+        في انتظار event.client.send_file (event.chat_id ، send_photos)
+    انتظار الحدث. حذف ()
